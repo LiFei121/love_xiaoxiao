@@ -89,7 +89,7 @@
             transform: translate(-50%, -50%);
             text-align: center;
             z-index: 10001;
-            animation: welcomeFadeOut 4s ease-out forwards;
+            animation: welcomeFadeOut 8s ease-out forwards;
             pointer-events: none;
         }
 
@@ -110,7 +110,7 @@
         }
 
         @keyframes welcomeFadeOut {
-            0%, 70% { opacity: 1; }
+            0%, 85% { opacity: 1; }
             100% { opacity: 0; }
         }
 
@@ -542,7 +542,7 @@
             if (title) {
                 setTimeout(() => {
                     title.style.display = 'none';
-                }, 4000);
+                }, 8000);
             }
         }
 
