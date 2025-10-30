@@ -42,6 +42,94 @@
             50% { transform: translateY(-50px) rotate(10deg); }
         }
 
+        /* 飘落的爱心动画 */
+        .falling-heart {
+            position: fixed;
+            font-size: 20px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: fall linear;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* 点击特效 */
+        .click-effect {
+            position: fixed;
+            pointer-events: none;
+            font-size: 30px;
+            animation: clickAnimation 1s ease-out forwards;
+            z-index: 9999;
+        }
+
+        @keyframes clickAnimation {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% {
+                transform: translate(-50%, -100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* 欢迎标题 */
+        .welcome-title {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10001;
+            animation: welcomeFadeOut 4s ease-out forwards;
+            pointer-events: none;
+        }
+
+        .welcome-title h1 {
+            font-size: 48px;
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
+                         0 0 40px rgba(255, 105, 180, 0.6);
+            margin-bottom: 20px;
+            animation: titlePulse 2s ease-in-out;
+        }
+
+        .welcome-title p {
+            font-size: 24px;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: titleSlide 2s ease-out;
+        }
+
+        @keyframes welcomeFadeOut {
+            0%, 70% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes titleSlide {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* 弹窗样式 */
         .popup {
             position: fixed;
@@ -180,6 +268,61 @@
             font-weight: bold;
         }
 
+        /* 特殊消息弹窗 */
+        .special-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 400px;
+            background: linear-gradient(135deg, #FF6B9D 0%, #C56CD6 100%);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            z-index: 10002;
+            text-align: center;
+            animation: specialPopupIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        @keyframes specialPopupIn {
+            to {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .special-popup h2 {
+            color: white;
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .special-popup p {
+            color: white;
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .special-popup .close-special {
+            background: white;
+            color: #FF6B9D;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .special-popup .close-special:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
         /* 移动端适配 */
         @media (max-width: 768px) {
             .popup {
@@ -203,15 +346,51 @@
                 padding: 8px 15px;
                 font-size: 12px;
             }
+
+            .special-popup {
+                width: 90%;
+                padding: 30px 20px;
+            }
+
+            .special-popup h2 {
+                font-size: 24px;
+            }
+
+            .special-popup p {
+                font-size: 16px;
+            }
+
+            .welcome-title h1 {
+                font-size: 32px;
+            }
+
+            .welcome-title p {
+                font-size: 18px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 欢迎标题 -->
+    <div class="welcome-title" id="welcomeTitle">
+        <h1>💖 送给最爱的肖肖 💖</h1>
+        <p>愿你每天都充满快乐和幸福</p>
+    </div>
+
     <!-- 背景装饰 -->
     <div class="background" id="background"></div>
 
+    <!-- 背景音乐 -->
+    <audio id="bgMusic" loop autoplay>
+        <!-- 使用本地音乐文件 M4A 格式 -->
+        <source src="music.m4a" type="audio/mp4">
+        <source src="music.m4a" type="audio/m4a">
+        您的浏览器不支持音频播放。
+    </audio>
+
     <!-- 控制面板 -->
     <div class="controls">
+        <button class="control-btn" id="musicBtn" onclick="toggleMusic()">🔇 音乐</button>
         <button class="control-btn" id="pauseBtn" onclick="togglePause()">⏸️ 暂停</button>
         <span class="status" id="status">运行中</span>
         <button class="control-btn" onclick="clearAllPopups()">🗑️ 清空</button>
@@ -223,10 +402,18 @@
         // ═══════════════════════════════════════════════════════════════
         
         const messages = [
-            "好好爱自己", "保持好心情", "金榜题名", "每天都要元气满满", "想你了",
-            "天冷了，多穿衣服", "别熬夜", "梦想成真", "期待下一次见面", "多喝水哦~",
-            "今天过得开心", "愿所有烦恼都消失", "保持微笑呀", "顺顺利利", "记得吃水果",
-            "你最棒了", "平安喜乐", "万事胜意", "好运连连", "做自己的小太阳"
+            "好好爱自己", "保持好心情", "offer快来", "每天都要元气满满", "宝宝想你了",
+            "天冷了，肖肖宝宝多穿衣服", "肖肖宝宝别熬夜", "宝宝梦想成真", "期待和宝宝的见面", "肖肖宝宝多喝水哦~",
+            "宝宝每天都要开心", "愿宝宝所有烦恼都消失", "宝宝保持微笑呀", "顺顺利利", "记得吃水果",
+            "肖肖最棒了", "肖肖宝宝平安喜乐", "肖肖宝宝万事胜意", "肖肖宝宝好运连连", "肖肖要做自己的小太阳",
+            "宝宝要好好吃饭", "肖肖宝宝注意休息", "想抱抱宝宝", "肖肖永远是最优秀的", "肖肖宝宝加油鸭",
+            "肖肖宝宝要开心呀", "今天也要元气满满哦", "肖肖宝宝辛苦啦", "肖肖值得最好的", "永远支持肖肖宝宝",
+            "肖肖宝宝别太累了", "记得按时吃饭哦", "宝宝笑起来最好看", "肖肖宝宝超棒的", "每天都想你",
+            "肖肖宝宝要健康", "愿宝宝心想事成", "肖肖是最美的", "宝宝要保护好自己", "肖肖宝宝最可爱",
+            "天天开心快乐", "肖肖宝宝前程似锦", "宝宝要勇敢", "所有美好都属于肖肖", "肖肖宝宝要幸福",
+            "困了就早点睡", "肖肖宝宝好好照顾自己", "宝宝是最棒的", "一切都会越来越好", "肖肖最聪明了",
+            "宝宝要自信一点", "肖肖宝宝加油冲鸭", "永远陪着肖肖宝宝", "肖肖值得被爱", "宝宝要相信自己",
+            "肖肖宝宝超厉害", "记得早点休息哦", "宝宝笑一个", "肖肖宝宝棒棒哒", "今天也爱你哟"
         ];
 
         const colorSchemes = [
@@ -240,11 +427,41 @@
             { bg: 'linear-gradient(135deg, #FFA8A8 0%, #FCFF00 100%)', icon: '🌸' },
             { bg: 'linear-gradient(135deg, #A8EDEA 0%, #FED6E3 100%)', icon: '🌈' },
             { bg: 'linear-gradient(135deg, #FBC2EB 0%, #A6C1EE 100%)', icon: '✨' },
+            { bg: 'linear-gradient(135deg, #FF9A9E 0%, #FAD0C4 100%)', icon: '🌺' },
+            { bg: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)', icon: '🦋' },
+            { bg: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)', icon: '🧡' },
+            { bg: 'linear-gradient(135deg, #ff6e7f 0%, #bfe9ff 100%)', icon: '💝' },
+            { bg: 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)', icon: '🌟' },
+            { bg: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', icon: '💜' },
+            { bg: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', icon: '🎈' },
+            { bg: 'linear-gradient(135deg, #fccb90 0%, #d57eeb 100%)', icon: '🎀' },
+            { bg: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', icon: '🌻' },
+            { bg: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)', icon: '🌙' },
+            { bg: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)', icon: '🍬' },
+            { bg: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)', icon: '🌷' },
+            { bg: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)', icon: '☀️' },
+            { bg: 'linear-gradient(135deg, #74ebd5 0%, #acb6e5 100%)', icon: '🦄' },
+            { bg: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)', icon: '🍑' },
+            { bg: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 100%)', icon: '🎨' },
+            { bg: 'linear-gradient(135deg, #ee9ca7 0%, #ffdde1 100%)', icon: '🌹' },
+            { bg: 'linear-gradient(135deg, #a8e6cf 0%, #ffd3b6 100%)', icon: '🍃' },
+            { bg: 'linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)', icon: '🌿' },
+            { bg: 'linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%)', icon: '🎁' },
+            { bg: 'linear-gradient(135deg, #fdcbf1 0%, #e6dee9 100%)', icon: '🧸' },
+            { bg: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)', icon: '☁️' },
+            { bg: 'linear-gradient(135deg, #ffd89b 0%, #19547b 100%)', icon: '🌅' },
+            { bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', icon: '💫' },
+            { bg: 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)', icon: '🍊' },
+            { bg: 'linear-gradient(135deg, #96fbc4 0%, #f9f586 100%)', icon: '🌼' },
+            { bg: 'linear-gradient(135deg, #fbc7d4 0%, #9796f0 100%)', icon: '🎪' },
+            { bg: 'linear-gradient(135deg, #a9c9ff 0%, #ffbbec 100%)', icon: '🎵' },
+            { bg: 'linear-gradient(135deg, #fff1eb 0%, #ace0f9 100%)', icon: '🕊️' },
+            { bg: 'linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%)', icon: '🍓' }
         ];
 
         const CONFIG = {
-            popupInterval: 200,      // 弹窗间隔（毫秒）
-            maxPopups: 100,          // 最大弹窗数
+            popupInterval: 100,      // 弹窗间隔（毫秒）
+            maxPopups: 200,          // 最大弹窗数
             popupLifetime: 10000,    // 弹窗生存时间（毫秒）
         };
 
@@ -255,6 +472,10 @@
         let isPaused = false;
         let popupInterval = null;
         let popups = [];
+        let isMusicPlaying = false;
+        let bgMusic = null;
+        let clickCount = 0;
+        let specialMessageShown = false;
 
         // 创建背景装饰
         function createBackground() {
@@ -269,6 +490,90 @@
                 heart.style.top = Math.random() * 100 + '%';
                 heart.style.animationDelay = Math.random() * 10 + 's';
                 bg.appendChild(heart);
+            }
+        }
+
+        // 创建飘落的爱心
+        function createFallingHeart() {
+            const hearts = ['💕', '💖', '💗', '💝', '💓', '💞', '💘', '❤️'];
+            const heart = document.createElement('div');
+            heart.className = 'falling-heart';
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '-30px';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            document.body.appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 7000);
+        }
+
+        // 持续创建飘落的爱心
+        function startFallingHearts() {
+            setInterval(() => {
+                if (Math.random() > 0.2) { // 80%概率
+                    createFallingHeart();
+                }
+            }, 400); // 每400毫秒检查一次
+            
+            // 额外再启动一个间隔，增加密度
+            setInterval(() => {
+                if (Math.random() > 0.3) { // 70%概率
+                    createFallingHeart();
+                }
+            }, 600);
+        }
+
+        // 点击特效
+        function createClickEffect(x, y) {
+            const effects = ['💕', '💖', '💗', '✨', '⭐', '💫'];
+            const effect = document.createElement('div');
+            effect.className = 'click-effect';
+            effect.textContent = effects[Math.floor(Math.random() * effects.length)];
+            effect.style.left = x + 'px';
+            effect.style.top = y + 'px';
+            document.body.appendChild(effect);
+            
+            setTimeout(() => effect.remove(), 1000);
+        }
+
+        // 移除欢迎标题
+        function removeWelcomeTitle() {
+            const title = document.getElementById('welcomeTitle');
+            if (title) {
+                setTimeout(() => {
+                    title.style.display = 'none';
+                }, 4000);
+            }
+        }
+
+        // 显示特殊消息（彩蛋）
+        function showSpecialMessage() {
+            if (specialMessageShown) return;
+            specialMessageShown = true;
+
+            const specialPopup = document.createElement('div');
+            specialPopup.className = 'special-popup';
+            specialPopup.innerHTML = `
+                <h2>💖 特别的话 💖</h2>
+                <p>亲爱的肖肖：</p>
+                <p>这是我精心为你准备的小惊喜</p>
+                <p>每一条祝福都来自我的真心</p>
+                <p>希望能给你带来快乐和温暖</p>
+                <p>愿你的每一天都充满阳光</p>
+                <p>我会一直陪在你身边</p>
+                <p style="font-size: 20px; margin-top: 20px;">💕 永远爱你 💕</p>
+                <button class="close-special" onclick="this.parentElement.remove()">好的，我收到啦 ❤️</button>
+            `;
+            document.body.appendChild(specialPopup);
+
+            // 创建烟花效果
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    createClickEffect(
+                        Math.random() * window.innerWidth,
+                        Math.random() * window.innerHeight
+                    );
+                }, i * 100);
             }
         }
 
@@ -335,6 +640,66 @@
             popups.forEach(popup => closePopup(popup));
         }
 
+        // 音乐控制
+        function toggleMusic() {
+            const musicBtn = document.getElementById('musicBtn');
+            
+            if (!bgMusic) {
+                bgMusic = document.getElementById('bgMusic');
+            }
+            
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicBtn.textContent = '🔇 音乐';
+                isMusicPlaying = false;
+            } else {
+                bgMusic.play().then(() => {
+                    musicBtn.textContent = '🔊 音乐';
+                    isMusicPlaying = true;
+                }).catch(error => {
+                    console.log('音乐播放失败:', error);
+                    alert('音乐播放失败，请检查音乐文件路径或点击页面后重试');
+                });
+            }
+        }
+
+        // 尝试自动播放音乐（某些浏览器可能会阻止）
+        function tryAutoPlayMusic() {
+            bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.3; // 设置音量为30%
+            
+            // 尝试自动播放
+            const playPromise = bgMusic.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    isMusicPlaying = true;
+                    document.getElementById('musicBtn').textContent = '🔊 音乐';
+                    console.log('音乐自动播放成功！');
+                }).catch((error) => {
+                    // 自动播放被阻止，等待用户手动点击
+                    console.log('自动播放被阻止，请点击音乐按钮:', error);
+                    isMusicPlaying = false;
+                    document.getElementById('musicBtn').textContent = '🔇 音乐';
+                });
+            }
+        }
+        
+        // 页面交互后尝试播放音乐
+        function enableAutoPlay() {
+            if (!isMusicPlaying && bgMusic) {
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                    document.getElementById('musicBtn').textContent = '🔊 音乐';
+                }).catch(() => {
+                    // 播放失败
+                });
+                // 只尝试一次后移除监听器
+                document.removeEventListener('click', enableAutoPlay);
+                document.removeEventListener('touchstart', enableAutoPlay);
+            }
+        }
+
         // 暂停/继续
         function togglePause() {
             isPaused = !isPaused;
@@ -374,11 +739,45 @@
         window.onload = () => {
             createBackground();
             startPopups();
+            startFallingHearts();
+            removeWelcomeTitle();
             
             // 立即创建几个弹窗
             for (let i = 0; i < 3; i++) {
                 setTimeout(() => createPopup(), i * 300);
             }
+            
+            // 尝试自动播放音乐
+            setTimeout(() => tryAutoPlayMusic(), 100);
+            
+            // 如果自动播放失败，监听用户的首次交互
+            setTimeout(() => {
+                if (!isMusicPlaying) {
+                    document.addEventListener('click', enableAutoPlay);
+                    document.addEventListener('touchstart', enableAutoPlay);
+                }
+            }, 1000);
+
+            // 添加全局点击特效
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.control-btn')) {
+                    createClickEffect(e.clientX, e.clientY);
+                    
+                    // 彩蛋：点击52次显示特殊消息（代表52赫兹的爱）
+                    clickCount++;
+                    if (clickCount === 52 && !specialMessageShown) {
+                        setTimeout(() => showSpecialMessage(), 500);
+                    }
+                }
+            });
+
+            // 移动端触摸特效
+            document.addEventListener('touchstart', (e) => {
+                if (!e.target.closest('.control-btn')) {
+                    const touch = e.touches[0];
+                    createClickEffect(touch.clientX, touch.clientY);
+                }
+            });
         };
 
         // 清理

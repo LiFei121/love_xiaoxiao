@@ -22,7 +22,7 @@
 **步骤：**
 1. 将代码上传到 GitHub 仓库
 2. 在仓库设置中开启 GitHub Pages
-3. 分享链接给朋友：`https://你的用户名.github.io/仓库名/love.html`
+3. 分享链接给朋友：`https://lifei121.github.io/love_xiaoxiao/love_xiaoxiao.html`
 
 ### 方法二：本地使用
 
